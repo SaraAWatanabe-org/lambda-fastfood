@@ -1,0 +1,20 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Resources:
+  CognitoLoginFunction:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Handler: br.com.fiap.fastfood.handlers.CognitoLoginHandler::handleRequest
+      Runtime: java11
+      CodeUri: .
+      MemorySize: 512
+      Timeout: 30
+      Environment:
+        Variables:
+          CLIENT_ID: "1ouemvqkchdc5q70cl3vdmold"
+      Events:
+        CognitoLoginApi:
+          Type: Api
+          Properties:
+            Path: /login
+            Method: post

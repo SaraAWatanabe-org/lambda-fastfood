@@ -21,19 +21,23 @@ jobs:
         java-version: '11'
 
     - name: Build with Maven
-      run: mvn clean package
+      run: mvn -X clean package
 
     - name: Upload artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: lambda-jar
         path: target/fastfood-0.0.1-SNAPSHOT-shaded.jar
 
-    - name: Deploy to AWS Lambda
-      uses: aws-actions/aws-lambda-deploy@v1.0.0
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        function-name: lambda-cognito-java-11  # Nome da func na AWS
-        region: us-east-1
-        zip-file: target/fastfood-0.0.1-SNAPSHOT-shaded.jar
+        aws-region: us-east-1
+
+    - name: Deploy to AWS Lambda
+      run: |
+        aws lambda update-function-code \
+          --function-name lambda-cognito-java-11 \
+          --zip-file fileb://target/fastfood-0.0.1-SNAPSHOT-shaded.jar

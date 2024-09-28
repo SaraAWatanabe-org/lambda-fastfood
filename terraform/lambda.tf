@@ -26,7 +26,9 @@ resource "aws_lambda_function" "cognito_login_function" {
   handler       = var.handler
   runtime       = "java11"
 
-  filename = "base_lambda.jar"
+  filename    = "base_lambda.jar"
+  memory_size = 512
+  timeout     = 20
 
 
   environment {
